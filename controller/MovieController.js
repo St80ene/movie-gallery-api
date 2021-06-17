@@ -6,7 +6,7 @@ const streamifier = require('streamifier');
 class MovieController {
 	createMovie = async (req, res) => {
 		console.log('Inside movie controller');
-		const {video, title, description } = req.body;
+		const { title, description } = req.body;
 		try {
 			console.log('about to call upload');
 			console.log(this);
@@ -35,7 +35,7 @@ class MovieController {
 			console.log(savedVideo);
 			res
 				.status(200)
-				.json({ message: 'Video saved', data: savedVideo, width, height });
+				.json({ message: 'Video saved', data: savedVideo, width, height, status: 201 });
 			return;
 		} catch (error) {
 			res.status(400).json(error.message);
@@ -44,9 +44,8 @@ class MovieController {
 
 	streamUpload(req) {
 		return new Promise((resolve, reject) => {
-
 			let stream = cloudinary.uploader.upload_stream(
-				{'resource_type': 'video'},
+				{ resource_type: 'video' },
 				(error, result) => {
 					if (result) {
 						resolve(result);
@@ -60,16 +59,25 @@ class MovieController {
 	}
 
 	async upload(req) {
-
 		return await this.streamUpload(req);
 	}
 
 	async updateMovie(req, res) {
 		try {
 			let movieId = req.params.id;
-			const movie = await movieModel.findByIdAndUpdate(movieId, req.body);
+			const { title, description } = req.body;
+			const movie = await movieModel.findByIdAndUpdate(
+				movieId,
+				{
+					title,
+					description,
+				},
+				{ new: true }
+			);
 			if (movie) {
-				res.status(200).json('Update successful...');
+				res
+					.status(201)
+					.json({ message: 'updated successfully', status: 201, data: movie });
 			} else {
 				throw new Error("This movie doesn't exists");
 			}
@@ -109,9 +117,9 @@ class MovieController {
 			let movieId = req.params.id;
 			const movie = await movieModel.findByIdAndDelete(movieId, req.body);
 			if (movie) {
-				res.status(200).json('Deleted');
+				res.status(200).json({message: 'Deleted', status: 200, data: movie});
 			} else {
-				throw new Error("This movie doesn't exists");
+				throw new Error("Not found");
 			}
 		} catch (error) {
 			res.status(400).json(error.message);

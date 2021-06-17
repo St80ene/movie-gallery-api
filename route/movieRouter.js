@@ -8,14 +8,14 @@ const fileUpload = multer();
 
 const movie = new movieController();
 
-router.get('/Movie-gallery/movies', movie.getMovie);
+router.get('/movies', movie.getMovie);
 
-router.get('/Movie-gallery/movies/:id', movie.searchMovieById);
+router.get('/movies/:id', movie.searchMovieById);
 
-router.post('/Movie-gallery/movies',fileUpload.single('video'), movie.createMovie);
+router.post('/movies/upload',fileUpload.single('video'), movie.createMovie);
 
-router.put('/Movie-gallery/movies/:id', movie.updateMovie);
+router.put('/movies/:id', movie.updateMovie);
 
-router.delete('/Movie-gallery/movies/:id', movie.deleteMovie);
+router.delete('/movies/:id', movie.deleteMovie);
 
 module.exports = router;
