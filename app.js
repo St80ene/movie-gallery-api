@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const DB = require('./db')
 const movieRouter = require('./route/movieRouter')
 
-const port = process.env.port || 4000;
+const port = process.env.PORT || 4000;
 const mongodb_uri = process.env.MONGODB_URI
 
 // parse application/x-www-form-urlencoded
@@ -25,7 +25,7 @@ app.use(movieRouter)
 
 
 app.get('/', function (req, res) {
-	res.send('Welcome to Movie Nights!!!');
+	res.json({message: 'Welcome to Movie Nights!!!'});
 });
 
 // morgan('tiny', ()=> 'Establishing connection to database')

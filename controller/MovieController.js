@@ -38,14 +38,12 @@ class MovieController {
 				.json({ message: 'Video saved', data: savedVideo, width, height });
 			return;
 		} catch (error) {
-			console.log('error => ', error.message);
 			res.status(400).json(error.message);
 		}
 	};
 
 	streamUpload(req) {
 		return new Promise((resolve, reject) => {
-			console.log('cloudinary streaming...');
 
 			let stream = cloudinary.uploader.upload_stream(
 				{'resource_type': 'video'},
@@ -57,14 +55,11 @@ class MovieController {
 					}
 				}
 			);
-			console.log('the request file =>', req.file);
-			console.log('the request file buffer =>', req.file.buffer);
 			streamifier.createReadStream(req.file.buffer).pipe(stream);
 		});
 	}
 
 	async upload(req) {
-		console.log('about to call streamupload');
 
 		return await this.streamUpload(req);
 	}
