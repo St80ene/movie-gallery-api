@@ -37,4 +37,4 @@ new DB()
 	.catch((error) => console.error(error));
 
 
-app.listen(port, 'localhost', console.log(`App listening on port ${port}` ));
+app.listen(port, () => console.log(`App listening on port ${port}` ));
