@@ -1,7 +1,6 @@
 # movie-gallery-api
-API to serve My Video Gallery Website
 
-A CRUD APP to handle video requests
+API to serve My Video Gallery Website
 
 
 ## API Reference
@@ -18,7 +17,7 @@ A CRUD APP to handle video requests
   GET /movies
 ```
 
-#### Get user
+#### Get movies
 
 ```http
   GET /movies/id
@@ -28,39 +27,38 @@ A CRUD APP to handle video requests
 | :-------- | :------- | :-------------------------------- |
 | `id`      | `string` | **Required**. Id of item to fetch |
 
-#### Create user
+#### Create movies
 
 ```http
-  POST /movies/
+  POST /movies/upload
 ```
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `name`      | `string` | **Required**. Name of user to create |
-| `email`      | `string` | **Required**. Email of user to create |
-| `country`      | `string` | **Required**. Country of user to create |
+| `title`      | `string` | **Required**. Title of movie |
+| `description`      | `string` | **Required**. Description of movie |
 
-#### Update user
+#### Update movies
 
 ```http
-  PUT /users/id
+  PUT /movies/id
 ```
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of user to update |
-| `key`      | `string` | **Required**. Key of user to update |
+| `id`      | `string` | **Required**. Id of movies |
+| `key`      | `string` | **Required**. Key of movies |
 
-#### Delete user
+#### Delete movies
 
 ```http
-  DELETE /users/id
+  DELETE /movies/id
 ```
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of user to delete |
-| `key`      | `string` | **Required**. Key of user to delete |
+| `id`      | `string` | **Required**. Id of movies |
+| `key`      | `string` | **Required**. Key of movies |
 
 
   
@@ -69,9 +67,15 @@ A CRUD APP to handle video requests
 
 To run this project, you will need to add the following environment variables to your .env file
 
-`DATABASE_URI`
-
+`MONGODB_URI`
 `PORT`
+`DB_NAME`
+`DB_PASSWORD`
+`DB_USERNAME`
+`CLOUD_NAME`
+`CLOUD_API_KEY`
+`CLOUD_API_SECRET`
+`CLOUDINARY_URL`
 
   
 ## Authors
@@ -98,13 +102,13 @@ Base URL: https://movie-gallery-api.herokuapp.com/
 Clone the project
 
 ```bash
-  git clone git@github.com:St80ene/zuri-task5-crud-app.git
+  git@github.com:St80ene/movie-gallery-api.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd zuri-task5-crud-app
+  cd movie-gallery-api
 ```
 
 Install dependencies
