@@ -1,7 +1,7 @@
 # movie-gallery-api
 API to serve My Video Gallery Website
 
-A CRUD APP that handles Client's requests using HTTP VERBS
+A CRUD APP to handle video requests
 
 
 ## API Reference
@@ -12,16 +12,16 @@ A CRUD APP that handles Client's requests using HTTP VERBS
   GET /
 ```
 
-#### Get all users
+#### Get all movies
 
 ```http
-  GET /users
+  GET /movies
 ```
 
 #### Get user
 
 ```http
-  GET /users/id
+  GET /movies/id
 ```
 
 | Parameter | Type     | Description                       |
@@ -31,7 +31,7 @@ A CRUD APP that handles Client's requests using HTTP VERBS
 #### Create user
 
 ```http
-  POST /users/
+  POST /movies/
 ```
 
 | Parameter | Type     | Description                       |
