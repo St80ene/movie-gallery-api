@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const movieSchema = mongoose.Schema({
-	video: {
+	videoUrl: {
 		type: String,
 		min: 3,
 		required: true,
@@ -18,14 +18,17 @@ const movieSchema = mongoose.Schema({
 		required: true,
 	},
 	duration: {
-		type: String,
-		min: 3,
+		type: Number,
 		required: true,
 	},
 	format: {
 		type: String,
 		min: 3,
 		max: 5,
+		required: true,
+	},
+	publicId: {
+		type: String,
 		required: true,
 	},
 	date: {
