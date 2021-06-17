@@ -1,21 +1,17 @@
 const movieModel = require('../model/movieModel');
-const cloudinary = require('../config/cloudinaryConfig');
-// const cloudinary = require('cloudinary').v2;
+const cloudinary = require('../lib/cloudinaryConfig');
 const streamifier = require('streamifier');
 
 class MovieController {
 	createMovie = async (req, res) => {
-		console.log('Inside movie controller');
 		const { title, description } = req.body;
 		try {
-			console.log('about to call upload');
-			console.log(this);
 			const result = await this.upload(req);
 			const { url, duration, format, public_id, width, height } = result;
 
 			//checking database for duplicate
 
-			const movie = await movieModel.findOne({ publicId });
+			const movie = await movieModel.findOne({ publicId: public_id });
 			if (movie) {
 				res.status(400).json({
 					status: 400,
@@ -32,13 +28,16 @@ class MovieController {
 				format,
 				publicId: public_id,
 			});
-			console.log(savedVideo);
-			res
-				.status(200)
-				.json({ message: 'Video saved', data: savedVideo, width, height, status: 201 });
+
+			res.status(200).json({
+				status: 201,
+				message: 'uploaded successfully',
+				data: savedVideo,
+				meta: { width, height },
+			});
 			return;
 		} catch (error) {
-			res.status(400).json(error.message);
+			res.status(400).json({status: 400, message: error.message});
 		}
 	};
 
@@ -77,52 +76,51 @@ class MovieController {
 			if (movie) {
 				res
 					.status(201)
-					.json({ message: 'updated successfully', status: 201, data: movie });
+					.json({ status: 201, message: 'updated successfully', data: movie });
 			} else {
-				throw new Error("This movie doesn't exists");
+				throw new Error("Not Found");
 			}
 		} catch (error) {
-			res.status(400).json(error.message);
+			res.status(400).json({ status: 400, message: error.message });
 		}
 	}
 
-	async getMovie(req, res) {
+	async getMovies(_req, res) {
 		try {
 			const movie = movieModel.find();
 			movie
 				.then((result) => res.status(200).json(result))
-				.catch((error) => console.error(error));
+				.catch((error) => res.json({ status: 400, message: error.message }));
 		} catch (error) {
-			res.status(400).json(error.message);
+			res.status(400).json({ status: 400, message: error.message });
 		}
 	}
 
-	async searchMovieById(req, res) {
+	async getMovieById(req, res) {
 		try {
 			const id = req.params.id;
 			const movie = await movieModel.findById(id);
 			if (movie) {
 				res.status(200).json(movie);
 			} else {
-				throw new Error("This movie doesn't exists");
+				throw new Error("Not Found");
 			}
 		} catch (error) {
-			res.status(400).json(error.message);
+			res.status(400).json({ status: 400, message: error.message });
 		}
 	}
 
 	async deleteMovie(req, res) {
-		// get the id from request
 		try {
 			let movieId = req.params.id;
 			const movie = await movieModel.findByIdAndDelete(movieId, req.body);
 			if (movie) {
-				res.status(200).json({message: 'Deleted', status: 200, data: movie});
+				res.status(200).json({ message: 'Deleted', status: 200, data: movie });
 			} else {
-				throw new Error("Not found");
+				throw new Error('Not Found');
 			}
 		} catch (error) {
-			res.status(400).json(error.message);
+			res.status(400).json({ status: 400, message: error.message });
 		}
 	}
 }
