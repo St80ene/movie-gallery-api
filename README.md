@@ -35,6 +35,7 @@ API to serve My Video Gallery Website
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
+| `video`      | `file` | **Required**. Video |
 | `title`      | `string` | **Required**. Title of movie |
 | `description`      | `string` | **Required**. Description of movie |
 
@@ -69,13 +70,9 @@ To run this project, you will need to add the following environment variables to
 
 `MONGODB_URI`
 `PORT`
-`DB_NAME`
 `DB_PASSWORD`
-`DB_USERNAME`
-`CLOUD_NAME`
 `CLOUD_API_KEY`
 `CLOUD_API_SECRET`
-`CLOUDINARY_URL`
 
   
 ## Authors
