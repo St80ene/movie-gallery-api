@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const movieSchema = mongoose.Schema({
 	videoUrl: {
 		type: String,
-		min: 3,
 		required: true,
 	},
 	title: {
