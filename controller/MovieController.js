@@ -37,7 +37,7 @@ class MovieController {
 			});
 			return;
 		} catch (error) {
-			res.status(400).json({status: 400, message: error.message});
+			res.status(400).json({ status: 400, message: error.message });
 		}
 	};
 
@@ -78,7 +78,7 @@ class MovieController {
 					.status(201)
 					.json({ status: 201, message: 'updated successfully', data: movie });
 			} else {
-				throw new Error("Not Found");
+				throw new Error('Not Found');
 			}
 		} catch (error) {
 			res.status(400).json({ status: 400, message: error.message });
@@ -103,7 +103,7 @@ class MovieController {
 			if (movie) {
 				res.status(200).json(movie);
 			} else {
-				throw new Error("Not Found");
+				throw new Error('Not Found');
 			}
 		} catch (error) {
 			res.status(400).json({ status: 400, message: error.message });
