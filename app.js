@@ -1,34 +1,25 @@
-const express = require('express');
-const app = express();
 require('dotenv').config();
-const bodyParser = require('body-parser');
+const express = require('express');
 const morgan = require('morgan');
-const DB = require('./db')
-const movieRouter = require('./route/movieRouter')
+const DB = require('./db');
+const movieRouter = require('./route/movieRouter');
+const cors = require('cors');
 
+const app = express();
 const port = process.env.PORT || 4000;
-const mongodb_uri = process.env.MONGODB_URI
+const mongodb_uri = process.env.MONGODB_URI;
 
+app.use(cors({optionsSuccessStatus: 200}))
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 // parse application/json
 app.use(express.json());
-app.use(
-	bodyParser.urlencoded({
-		extended: true,
-	})
-);
-app.use(bodyParser.json());
 app.use(morgan('tiny'));
-app.use(movieRouter)
+app.use(movieRouter);
 
-
-
-app.get('/', function (req, res) {
-	res.json({message: 'Welcome to Movie Nights!!!'});
+app.get('/', function (_req, res) {
+	res.json({ message: 'Welcome to Movie Nights!!!' });
 });
-
-// morgan('tiny', ()=> 'Establishing connection to database')
 
 console.log('Establishing connection to Database');
 new DB()
@@ -36,5 +27,4 @@ new DB()
 	.then(() => console.log('Connected to Database'))
 	.catch((error) => console.error(error));
 
-
-app.listen(port, () => console.log(`App listening on port ${port}` ));
+app.listen(port, () => console.log(`App listening on port ${port}`));

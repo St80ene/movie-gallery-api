@@ -10,10 +10,10 @@ router.get('/movies', movie.getMovies);
 
 router.get('/movies/:id', movie.getMovieById);
 
-router.post('/movies/upload', fileUpload.single('video'), movie.createMovie);
+router.post('/movies/upload', fileUpload.single('video'), movie.upload);
 
 router.put('/movies/:id', movie.updateMovie);
 
-router.delete('/movies/:id', movie.deleteMovie);
+router.delete('/movies/:public_id', movie.deleteMovie);
 
 module.exports = router;
