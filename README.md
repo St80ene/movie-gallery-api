@@ -35,7 +35,7 @@ API to serve My Video Gallery Website
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `video`      | `file` | **Required**. Video |
+| `video`      | `filepath url` | **Required**. Video |
 | `title`      | `string` | **Required**. Title of movie |
 | `description`      | `string` | **Required**. Description of movie |
 
@@ -58,8 +58,7 @@ API to serve My Video Gallery Website
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of movies |
-| `key`      | `string` | **Required**. Key of movies |
+| `publicId`      | `string` | **Required**. Id of movies |
 
 
   
@@ -73,6 +72,7 @@ To run this project, you will need to add the following environment variables to
 `DB_PASSWORD`
 `CLOUD_API_KEY`
 `CLOUD_API_SECRET`
+`CLOUD_NAME`
 
   
 ## Authors
