@@ -3,19 +3,18 @@ const cloudinary = require('../lib/cloudinaryConfig');
 const streamifier = require('streamifier');
 
 class MovieController {
-	createMovie = async (req, res) => {
+	upload = async (req, res) => {
 		const { title, description } = req.body;
 		try {
-			const result = await this.upload(req);
-			const { url, duration, format, public_id, width, height } = result;
-
+			const uploadedVideo = await this.streamUpload(req);
+			const { url, duration, format, public_id, width, height } = uploadedVideo;
 			//checking database for duplicate
-
 			const movie = await movieModel.findOne({ publicId: public_id });
 			if (movie) {
 				res.status(400).json({
 					status: 400,
-					message: 'Movie already saved',
+					message: 'already exists',
+					data: {},
 				});
 				return;
 			}
@@ -29,7 +28,7 @@ class MovieController {
 				publicId: public_id,
 			});
 
-			res.status(200).json({
+			res.status(201).json({
 				status: 201,
 				message: 'uploaded successfully',
 				data: savedVideo,
@@ -45,9 +44,9 @@ class MovieController {
 		return new Promise((resolve, reject) => {
 			let stream = cloudinary.uploader.upload_stream(
 				{ resource_type: 'video' },
-				(error, result) => {
-					if (result) {
-						resolve(result);
+				(error, response) => {
+					if (response) {
+						resolve(response);
 					} else {
 						reject(error);
 					}
@@ -55,10 +54,6 @@ class MovieController {
 			);
 			streamifier.createReadStream(req.file.buffer).pipe(stream);
 		});
-	}
-
-	async upload(req) {
-		return await this.streamUpload(req);
 	}
 
 	async updateMovie(req, res) {
@@ -87,12 +82,14 @@ class MovieController {
 
 	async getMovies(_req, res) {
 		try {
-			const movie = movieModel.find();
-			movie
-				.then((result) => res.status(200).json(result))
-				.catch((error) => res.json({ status: 400, message: error.message }));
+			const movies = await movieModel.find();
+			res.status(200).json({
+				status: 200,
+				message: 'retrieved successfully',
+				data: movies,
+			});
 		} catch (error) {
-			res.status(400).json({ status: 400, message: error.message });
+			res.status(400).json({ status: 400, message: error.message, data: {} });
 		}
 	}
 
@@ -101,23 +98,59 @@ class MovieController {
 			const id = req.params.id;
 			const movie = await movieModel.findById(id);
 			if (movie) {
-				res.status(200).json(movie);
+				res.status(200).json({
+					status: 200,
+					message: 'retrieved successfully',
+					data: movie,
+				});
 			} else {
-				throw new Error('Not Found');
+				res.status(404).json({ status: 404, message: 'not found', data: {} });
 			}
 		} catch (error) {
-			res.status(400).json({ status: 400, message: error.message });
+			res.status(400).json({ status: 400, message: error.message, data: {} });
 		}
 	}
 
 	async deleteMovie(req, res) {
 		try {
-			let movieId = req.params.id;
-			const movie = await movieModel.findByIdAndDelete(movieId, req.body);
-			if (movie) {
-				res.status(200).json({ message: 'Deleted', status: 200, data: movie });
+			const publicId = req.params.public_id;
+			// check if video exist in database
+			const foundMovie = await movieModel.findOne({ publicId });
+			if (foundMovie) {
+				// delete it from cloudinary
+				cloudinary.uploader.destroy(
+					publicId,
+					{ resource_type: 'video' },
+					async (error, response) => {
+						// if deleted on cloudinary, then delete from database
+						if (response) {
+							await movieModel.findOneAndDelete({
+								publicId,
+							});
+
+							res.status(200).json({
+								status: 200,
+								message: 'deleted successfully',
+								data: { publicId },
+							});
+						} else {
+							// if there's an error from cloudinary
+							res.status(400).json({
+								status: 400,
+								message:
+									error.message || 'cloudinary could not delete the video',
+								data: {},
+							});
+						}
+					}
+				);
 			} else {
-				throw new Error('Not Found');
+				// if video does not exist in the database
+				res.status(404).json({
+					status: 404,
+					message: 'not found',
+					data: {},
+				});
 			}
 		} catch (error) {
 			res.status(400).json({ status: 400, message: error.message });
