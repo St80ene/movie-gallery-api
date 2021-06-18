@@ -36,6 +36,7 @@ class MovieController {
 			});
 			return;
 		} catch (error) {
+			console.log('error =>', error);
 			res.status(400).json({ status: 400, message: error.message });
 		}
 	};
