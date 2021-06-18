@@ -36,8 +36,7 @@ class MovieController {
 			});
 			return;
 		} catch (error) {
-			console.log('error =>', error);
-			res.status(400).json({ status: 400, message: error.message });
+			res.status(400).json({ status: 400, message: error });
 		}
 	};
 
@@ -138,8 +137,7 @@ class MovieController {
 							// if there's an error from cloudinary
 							res.status(400).json({
 								status: 400,
-								message:
-									error.message || 'cloudinary could not delete the video',
+								message: error || 'cloudinary could not delete the video',
 								data: {},
 							});
 						}
