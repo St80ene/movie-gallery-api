@@ -59,7 +59,7 @@ class MovieController {
 
 	async updateMovie(req, res) {
 		try {
-			let movieId = req.params.public_id;
+			let movieId = req.params.id;
 			const { title, description } = req.body;
 			const movie = await movieModel.findByIdAndUpdate(
 				movieId,
