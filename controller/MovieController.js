@@ -44,7 +44,7 @@ class MovieController {
 	streamUpload(req) {
 		return new Promise((resolve, reject) => {
 			let stream = cloudinary.uploader.upload_stream(
-				{ resource_type: 'video' },
+				{ resource_type: 'video', folder: 'Movies' },
 				(error, response) => {
 					if (response) {
 						resolve(response);
