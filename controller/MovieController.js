@@ -72,7 +72,7 @@ class MovieController {
 			if (movie) {
 				res
 					.status(201)
-					.json({ status: 201, message: 'updated successfully', data: movie });
+					.json({ status: 200, message: 'updated successfully', data: movie });
 			} else {
 				throw new Error('Not Found');
 			}
