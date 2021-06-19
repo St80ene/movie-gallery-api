@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 const MovieController = require('../controller/MovieController');
+// const movieValidation = require('../middlewares/movieMiddleware')
 
 const fileUpload = multer();
 const movie = new MovieController();

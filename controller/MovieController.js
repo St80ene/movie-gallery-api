@@ -4,7 +4,8 @@ const streamifier = require('streamifier');
 
 class MovieController {
 	upload = async (req, res) => {
-		const { title, description } = req.body;
+		const { text } = req.body;
+		const [title, description] = text; 
 		try {
 			const uploadedVideo = await this.streamUpload(req);
 			const { url, duration, format, public_id, width, height } = uploadedVideo;
