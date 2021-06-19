@@ -44,7 +44,7 @@ class MovieController {
 	streamUpload(req) {
 		return new Promise((resolve, reject) => {
 			let stream = cloudinary.uploader.upload_stream(
-				{ resource_type: 'video', folder: 'Movies' },
+				{ resource_type: 'video'},
 				(error, response) => {
 					if (response) {
 						resolve(response);
@@ -105,7 +105,7 @@ class MovieController {
 					data: movie,
 				});
 			} else {
-				res.status(404).json({ status: 404, message: 'not found', data: {} });
+				res.status(404).json({ status: 404, message: 'Not found', data: {} });
 			}
 		} catch (error) {
 			res.status(400).json({ status: 400, message: error.message, data: {} });
@@ -131,7 +131,7 @@ class MovieController {
 
 							res.status(200).json({
 								status: 200,
-								message: 'deleted successfully',
+								message: 'Deleted successfully',
 								data: { publicId },
 							});
 						} else {
@@ -148,7 +148,7 @@ class MovieController {
 				// if video does not exist in the database
 				res.status(404).json({
 					status: 404,
-					message: 'not found',
+					message: 'Not found',
 					data: {},
 				});
 			}
