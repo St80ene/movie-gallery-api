@@ -59,7 +59,7 @@ class MovieController {
 
 	async updateMovie(req, res) {
 		try {
-			let movieId = req.params.id;
+			let movieId = req.params.public_id;
 			const { title, description } = req.body;
 			const movie = await movieModel.findByIdAndUpdate(
 				movieId,
@@ -72,7 +72,7 @@ class MovieController {
 			if (movie) {
 				res
 					.status(201)
-					.json({ status: 201, message: 'updated successfully', data: movie });
+					.json({ status: 200, message: 'updated successfully', data: movie });
 			} else {
 				throw new Error('Not Found');
 			}
