@@ -60,13 +60,10 @@ class MovieController {
 	async updateMovie(req, res) {
 		try {
 			let movieId = req.params.id;
-			const { title, description } = req.body;
+			// const { title, description } = req.body;
 			const movie = await movieModel.findByIdAndUpdate(
 				movieId,
-				{
-					title,
-					description,
-				},
+				req.body,
 				{ new: true }
 			);
 			if (movie) {
