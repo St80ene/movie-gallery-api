@@ -3,22 +3,33 @@ const cloudinary = require('../lib/cloudinaryConfig');
 const streamifier = require('streamifier');
 
 class MovieController {
+	constructor() {
+		this.cloudinary_folderName = 'KEYLA-Technologies-test';
+	}
+	
 	upload = async (req, res) => {
-		const { text } = req.body;
-		const [title, description] = text; 
+		const requestBody = req.body.text || req.body;
+		// request from ui
+		if (Array.isArray(requestBody)) {
+			var [title, description] = requestBody; 
+		} else {
+			// request from postman
+			var { title, description } = requestBody; 
+		}
 		try {
-			const uploadedVideo = await this.streamUpload(req);
-			const { url, duration, format, public_id, width, height } = uploadedVideo;
 			//checking database for duplicate
-			const movie = await movieModel.findOne({ publicId: public_id });
+			const movie = await movieModel.findOne({ title });
 			if (movie) {
 				res.status(400).json({
 					status: 400,
-					message: 'already exists',
+					message: 'title already exists',
 					data: {},
 				});
 				return;
 			}
+
+			const uploadedVideo = await this.streamUpload(req);
+			const { url, duration, format, public_id, width, height } = uploadedVideo;
 
 			const savedVideo = await movieModel.create({
 				videoUrl: url,
@@ -44,7 +55,7 @@ class MovieController {
 	streamUpload(req) {
 		return new Promise((resolve, reject) => {
 			let stream = cloudinary.uploader.upload_stream(
-				{ resource_type: 'video'},
+				{ resource_type: 'video', folder: this.cloudinary_folderName},
 				(error, response) => {
 					if (response) {
 						resolve(response);
@@ -60,7 +71,6 @@ class MovieController {
 	async updateMovie(req, res) {
 		try {
 			let movieId = req.params.id;
-			// const { title, description } = req.body;
 			const movie = await movieModel.findByIdAndUpdate(
 				movieId,
 				req.body,
@@ -109,9 +119,10 @@ class MovieController {
 		}
 	}
 
-	async deleteMovie(req, res) {
+	deleteMovie = async(req, res) => {
 		try {
-			const publicId = req.params.public_id;
+			const {public_id} = req.params;
+			const publicId = `${this.cloudinary_folderName}/${public_id}`;
 			// check if video exist in database
 			const foundMovie = await movieModel.findOne({ publicId });
 			if (foundMovie) {
