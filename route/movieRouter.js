@@ -15,6 +15,7 @@ router.post('/movies/upload', fileUpload.single('video'), movie.upload);
 
 router.put('/movies/:id', movie.updateMovie);
 
-router.delete('/movies/:public_id', movie.deleteMovie);
+router.delete('/movies/:cloudinary_foldername/:public_id', movie.deleteMovie);
+// router.delete('/movies/:public_id', movie.deleteMovie);
 
 module.exports = router;
